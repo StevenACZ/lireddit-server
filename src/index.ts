@@ -29,11 +29,6 @@ const main = async () => {
 	app.listen(4000, () => {
 		console.log('Server started on localhost:4000');
 	});
-	// const post = orm.em.create(Post, { title: 'my second post' });
-	// await orm.em.persistAndFlush(post);
-
-	// const posts = await orm.em.find(Post, {});
-	// console.log(posts);
 };
 
 main().catch(err => console.error(err));
