@@ -79,4 +79,38 @@ export class UserResolver {
 			user,
 		};
 	}
+
+	@Mutation(() => UserResponse)
+	async login(
+		@Arg('options', () => UsernamePasswordInput) options: UsernamePasswordInput,
+		@Ctx() { em }: MyContext
+	): Promise<UserResponse> {
+		const user = await em.findOne(User, { username: options.username });
+
+		if (!user) {
+			return {
+				errors: [
+					{
+						field: 'username',
+						message: "that username doesn't exist",
+					},
+				],
+			};
+		}
+
+		const valid = await argon2.verify(user.password, options.password);
+
+		if (!valid) {
+			return {
+				errors: [
+					{
+						field: 'password',
+						message: 'incorrect password',
+					},
+				],
+			};
+		}
+
+		return { user };
+	}
 }
