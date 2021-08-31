@@ -67,6 +67,19 @@ export class UserResolver {
 			};
 		}
 
+		const username = await em.findOne(User, { username: options.username });
+
+		if (username) {
+			return {
+				errors: [
+					{
+						field: 'username',
+						message: 'username already taken',
+					},
+				],
+			};
+		}
+
 		const hashedPassword = await argon2.hash(options.password);
 		const user = em.create(User, {
 			username: options.username,
