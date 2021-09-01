@@ -5,6 +5,7 @@ import {
 	InputType,
 	Mutation,
 	ObjectType,
+	Query,
 	Resolver,
 } from 'type-graphql';
 import { MyContext } from '../types';
@@ -40,6 +41,24 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+	@Query(() => UserResponse)
+	async me(@Ctx() { req, em }: MyContext): Promise<UserResponse> {
+		const user = await em.findOne(User, { id: req.session.userId });
+
+		if (!user) {
+			return {
+				errors: [
+					{
+						field: 'session',
+						message: 'without session',
+					},
+				],
+			};
+		}
+
+		return { user };
+	}
+
 	@Mutation(() => UserResponse)
 	async register(
 		@Arg('options', () => UsernamePasswordInput) options: UsernamePasswordInput,
