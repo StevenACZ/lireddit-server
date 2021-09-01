@@ -96,7 +96,7 @@ export class UserResolver {
 	@Mutation(() => UserResponse)
 	async login(
 		@Arg('options', () => UsernamePasswordInput) options: UsernamePasswordInput,
-		@Ctx() { em }: MyContext
+		@Ctx() { req, em }: MyContext
 	): Promise<UserResponse> {
 		const user = await em.findOne(User, { username: options.username });
 
@@ -123,6 +123,8 @@ export class UserResolver {
 				],
 			};
 		}
+
+		req.session.userId = user.id;
 
 		return { user };
 	}
