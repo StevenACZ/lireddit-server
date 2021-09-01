@@ -7,6 +7,10 @@ import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/hello';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
+import {
+	ApolloServerPluginLandingPageDisabled,
+	ApolloServerPluginLandingPageGraphQLPlayground,
+} from 'apollo-server-core';
 
 const main = async () => {
 	const orm = await MikroORM.init(microConfig);
@@ -20,6 +24,10 @@ const main = async () => {
 			validate: false,
 		}),
 		context: () => ({ em: orm.em }),
+		plugins: [
+			ApolloServerPluginLandingPageGraphQLPlayground({}),
+			ApolloServerPluginLandingPageDisabled(),
+		],
 	});
 
 	await apolloServer.start();
