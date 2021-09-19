@@ -1,3 +1,10 @@
+// Types
+import { MyContext } from '../types';
+
+// Argon2
+import argon2 from 'argon2';
+
+// TypeGraphQL
 import {
 	Arg,
 	Ctx,
@@ -8,10 +15,11 @@ import {
 	Query,
 	Resolver,
 } from 'type-graphql';
-import { MyContext } from '../types';
-import { User } from '../entities/User';
-import argon2 from 'argon2';
 
+// Entities
+import { User } from '../entities/User';
+
+// Username Password Input
 @InputType()
 class UsernamePasswordInput {
 	@Field()
@@ -21,6 +29,7 @@ class UsernamePasswordInput {
 	password: string;
 }
 
+// Field Error
 @ObjectType()
 class FieldError {
 	@Field()
@@ -30,6 +39,7 @@ class FieldError {
 	message: string;
 }
 
+// User Response
 @ObjectType()
 class UserResponse {
 	@Field(() => [FieldError], { nullable: true })
@@ -41,6 +51,7 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+	// Me
 	@Query(() => UserResponse)
 	async me(@Ctx() { req, em }: MyContext): Promise<UserResponse> {
 		const user = await em.findOne(User, { id: req.session.userId });
@@ -59,6 +70,7 @@ export class UserResolver {
 		return { user };
 	}
 
+	// Register
 	@Mutation(() => UserResponse)
 	async register(
 		@Arg('options', () => UsernamePasswordInput) options: UsernamePasswordInput,
@@ -112,6 +124,7 @@ export class UserResolver {
 		};
 	}
 
+	// Login
 	@Mutation(() => UserResponse)
 	async login(
 		@Arg('options', () => UsernamePasswordInput) options: UsernamePasswordInput,
