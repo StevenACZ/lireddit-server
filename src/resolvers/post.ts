@@ -1,14 +1,21 @@
+// Types
 import { MyContext } from '../types';
+
+// TypeGraphQL
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql';
+
+// Entities
 import { Post } from '../entities/Post';
 
 @Resolver()
 export class PostResolver {
+	// Posts
 	@Query(() => [Post])
 	posts(@Ctx() { em }: MyContext): Promise<Post[]> {
 		return em.find(Post, {});
 	}
 
+	// Post
 	@Query(() => Post, { nullable: true })
 	post(
 		@Arg('id', () => Int) id: number,
@@ -17,6 +24,7 @@ export class PostResolver {
 		return em.findOne(Post, { id });
 	}
 
+	// Create Post
 	@Mutation(() => Post)
 	async createPost(
 		@Arg('title', () => String) title: string,
@@ -27,6 +35,7 @@ export class PostResolver {
 		return post;
 	}
 
+	// Update Post
 	@Mutation(() => Post, { nullable: true })
 	async updatePost(
 		@Arg('id', () => Int) id: number,
@@ -34,9 +43,7 @@ export class PostResolver {
 		@Ctx() { em }: MyContext
 	): Promise<Post | null> {
 		const post = await em.findOne(Post, { id });
-		if (!post) {
-			return null;
-		}
+		if (!post) return null;
 
 		if (typeof title !== 'undefined') {
 			post.title = title;
@@ -46,6 +53,7 @@ export class PostResolver {
 		return post;
 	}
 
+	// Delete Post
 	@Mutation(() => Boolean)
 	async deletePost(
 		@Arg('id', () => Int) id: number,
