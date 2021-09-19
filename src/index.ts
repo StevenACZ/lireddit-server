@@ -21,7 +21,7 @@ import {
 	ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
 
-// Type GraphQL
+// TypeGraphQL
 import { buildSchema } from 'type-graphql';
 
 // Resolvers
