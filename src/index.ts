@@ -1,20 +1,37 @@
+// MikroORM
 import { MikroORM } from '@mikro-orm/core';
-import { __prod__ } from './constants';
 import microConfig from './mikro-orm.config';
+
+// Constants
+import { __prod__ } from './constants';
+
+// Types
+import { MyContext } from './types';
+
+// Express
 import express from 'express';
+
+// Express Session
+import session from 'express-session';
+
+// Apollo Server Express
 import { ApolloServer } from 'apollo-server-express';
-import { buildSchema } from 'type-graphql';
-import { HelloResolver } from './resolvers/hello';
-import { PostResolver } from './resolvers/post';
-import { UserResolver } from './resolvers/user';
 import {
 	ApolloServerPluginLandingPageDisabled,
 	ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
+
+// Type GraphQL
+import { buildSchema } from 'type-graphql';
+
+// Resolvers
+import { HelloResolver } from './resolvers/hello';
+import { PostResolver } from './resolvers/post';
+import { UserResolver } from './resolvers/user';
+
+// Redis
 import redis from 'redis';
-import session from 'express-session';
 import connectRedis from 'connect-redis';
-import { MyContext } from './types';
 
 const main = async () => {
 	const orm = await MikroORM.init(microConfig);
